@@ -69,12 +69,8 @@ pip is Python’s package installer for adding extra features to your code.
 **Check your versions:**
 
 ```
-bash
+bash python3 --version pip3 --version
 ```
-
-CopyEdit
-
-`python3 --version pip3 --version`
 
 You should see Python 3.9+ and pip 21.x or higher.
 
@@ -89,44 +85,32 @@ To install the `tenacity` library in your lambda folder:
 **Create a virtual environment:**
 
 ```
-bash
+bash cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/lambda python3 -m venv venv
 ```
 
-CopyEdit
-
-`cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/lambda python3 -m venv venv`
 
 **Activate the virtual environment:**
 
 ```
-bash
+bash source venv/bin/activate
 ```
 
-CopyEdit
-
-`source venv/bin/activate`
 
 (You’ll see `(venv)` at the start of your terminal line.)
 
 **Install tenacity (and other dependencies):**
 
 ```
-bash
+bash pip install tenacity
 ```
 
-CopyEdit
-
-`pip install tenacity`
 
 **Deactivate when done (optional):**
 
 ```
-bash
+bash deactivate
 ```
 
-CopyEdit
-
-`deactivate`
 
 > **Tip:** Always activate the virtual environment before installing or running Python code with extra dependencies!
 
@@ -137,22 +121,16 @@ CopyEdit
 If using dependencies (like tenacity), install them directly into your lambda folder:
 
 ```
-bash
+bash cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/lambda pip install --target . tenacity
 ```
 
-CopyEdit
-
-`cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/lambda pip install --target . tenacity`
 
 **Zip everything in the lambda directory (excluding the venv folder if desired):**
 
 ```
-bash
+bash zip -r lambda_function_payload.zip . -x "venv/*"
 ```
 
-CopyEdit
-
-`zip -r lambda_function_payload.zip . -x "venv/*"`
 
 The ZIP must be named as referenced in your Terraform code.
 
@@ -161,12 +139,9 @@ The ZIP must be named as referenced in your Terraform code.
 ## Step 6: Deploy Infrastructure with Terraform
 
 ```
-bash
+bash cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/terraform terraform init terraform plan terraform apply
 ```
 
-CopyEdit
-
-`cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/terraform terraform init terraform plan terraform apply`
 
 Type `yes` when prompted.
 
@@ -184,12 +159,8 @@ Type `yes` when prompted.
 ## Step 8: Clean Up Resources When Done
 
 ```
-bash
+bash terraform destroy
 ```
-
-CopyEdit
-
-`terraform destroy`
 
 ---
 
@@ -199,12 +170,8 @@ CopyEdit
 You need to package external Python libraries with your Lambda code. For simple projects, install dependencies locally in your lambda folder, then zip everything (excluding venv):
 
 ```
-bash
+bash cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/lambda pip install --target . tenacity zip -r lambda_function_payload.zip . -x "venv/*"
 ```
-
-CopyEdit
-
-`cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/lambda pip install --target . tenacity zip -r lambda_function_payload.zip . -x "venv/*"`
 
 Update your Terraform code to reference the correct zip file if needed.
 
