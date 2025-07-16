@@ -1,0 +1,29 @@
+# .gitignore for Terraform, Python, and Lambda projects
+
+# Terraform
+.terraform/
+terraform.tfstate
+terraform.tfstate.*
+crash.log
+*.tfvars
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+ENV/
+env/
+.venv/
+.Python
+*.db
+
+# Lambda artifacts
+*.zip
+
+# OS files
+.DS_Store
+
+# Logs
+*.log
