@@ -1,100 +1,219 @@
-content = """
-# 🏃‍♂️ RUN_GUIDE.md — Complete Step-by-Step Setup & Run Guide for AWS Lambda + S3 + Terraform Project (Mac)
+# RUN\_GUIDE.md — Complete Step-by-Step Setup & Run Guide for AWS Lambda + S3 + Terraform Project (Mac)
 
-This guide will help you run your Lambda + S3 + Terraform SRE Starter Project end-to-end on your Mac, using AWS Free Tier. It includes prerequisites, setup, deployment, testing, cleanup, and troubleshooting—all in one place.
+This guide will help you run your Lambda + S3 + Terraform SRE Starter Project end-to-end on your Mac, using AWS Free Tier. It includes prerequisites, explanations, setup, deployment, testing, cleanup, troubleshooting, and best practices—all in one place.
 
 ---
 
-## 🤔 Before You Begin: What Are Homebrew, HashiCorp, and Tap?
+## Before You Begin: What Are Homebrew, HashiCorp, Tap, AWS CLI, and pip?
 
-- **`brew`** is the command-line tool for **Homebrew**, the most popular package manager for Mac. It lets you easily install, update, and manage software like Python, Git, Terraform, etc.
-- **HashiCorp** is the company behind Terraform and other DevOps tools.
-- **`tap`** in Homebrew means “add a new software source/repository.”  
+* **`brew`** is the command-line tool for **Homebrew**, the most popular package manager for Mac. It lets you easily install, update, and manage software like Python, Git, Terraform, etc.
+* **HashiCorp** is the company behind Terraform and other DevOps tools.
+* **`tap`** in Homebrew means “add a new software source/repository.”
   `brew tap hashicorp/tap` adds HashiCorp’s official tools (like Terraform) to your Homebrew install list.
+* **AWS CLI** stands for **Amazon Web Services Command Line Interface**. It lets you control your AWS account from Terminal, automating tasks like creating S3 buckets, deploying Lambda functions, and more—no browser needed! It’s also required by Terraform to authenticate and deploy resources to your AWS account.
+* **`pip`** is Python’s package installer. It lets you easily add new features to your Python code by installing extra libraries (like `tenacity` for retry logic). It’s used to bundle required libraries with your AWS Lambda code so everything runs smoothly in the cloud.
 
 ---
 
-## ✅ Step 1: Install Prerequisites
+## Step 1: Install Prerequisites
 
-1. **Install Terraform**
-    ```bash
-    brew tap hashicorp/tap
-    brew install hashicorp/tap/terraform
-    terraform -version
-    ```
+1. **Install Homebrew (if not already installed):**
 
-2. **Install AWS CLI**
+   ```bash
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
 
-   **What is AWS CLI?**  
-   - AWS CLI stands for **Amazon Web Services Command Line Interface**.
-   - It lets you control your AWS account from the Terminal, automating tasks like creating S3 buckets, deploying Lambda functions, and more—no browser needed!
-   - Required by Terraform to authenticate and deploy resources to your AWS account.
-  
-    ```bash
-    brew install awscli
-    aws --version
-    ```
+2. **Install Terraform**
 
-3. **Configure AWS CLI**
-    ```bash
-    aws configure
-    ```
-    - Enter your AWS access key, secret, default region (`us-east-1`), and output format (`json`).
-    - If you don’t have AWS keys, generate them here: https://console.aws.amazon.com/iam/home#/security_credentials
-    - Default region name [None]: us-east-1
-    - Default output format [None]: json 
+   ```bash
+   brew tap hashicorp/tap
+   brew install hashicorp/tap/terraform
+   terraform -version
+   ```
 
-4. **Confirm Python 3.9+ and pip are available**
+3. **Install AWS CLI**
 
-   ### 🤖 What is pip?
-   - **`pip` is Python’s package installer.**
-   - Lets you easily add new features to your Python code by installing extra libraries (like `tenacity` for retry logic).
-   - Used to bundle required libraries with your AWS Lambda code so everything runs smoothly in the cloud.
-
-    ```bash
-    python3 --version
-    pip3 --version
-    ```
-
-5. **(Optional for local editing) Install Lambda dependency**
-
-   ### 🛡️ Installing Python Dependencies Safely (Virtual Environment)
-
-**Recent Macs protect the system Python.  
-Best practice:** Use a virtual environment for any project dependencies.
-
-**To install the `tenacity` library (or others) in your lambda folder:**
-
-1. **Create a virtual environment:**
-    ```bash
-    cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/lambda
-    python3 -m venv venv
-    ```
-
-2. **Activate the virtual environment:**
-    ```bash
-    source venv/bin/activate
-    ```
-    _(You’ll see `(venv)` at the start of your terminal line.)_
-
-3. **Install tenacity (and other dependencies) inside the virtual environment:**
-    ```bash
-    pip install tenacity
-    ```
-
-4. **Deactivate when done (optional):**
-    ```bash
-    deactivate
-    ```
-
-**Tip:**  
-Always activate the virtual environment before installing or running Python code with extra dependencies!
+   ```bash
+   brew install awscli
+   aws --version
+   ```
 
 ---
 
-## ✅ Step 2: Package the Lambda Code
+## Step 2: Configure AWS CLI
 
-From your lambda directory:
-```bash
-cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/lambda
-zip -r lambda_function_payload.zip lambda_function.py
+**What is AWS CLI?**
+AWS CLI lets you control AWS from your Terminal and is required for Terraform deployments.
+
+**Configure AWS CLI:**
+
+aws configure
+
+Enter your AWS Access Key ID, Secret Access Key, default region (like us-east-1), and output format (json).
+
+If you don’t have AWS keys, create them at: AWS Security Credentials
+
+What is Default Region Name?
+
+It’s the AWS “location” for your resources. Most users pick us-east-1 (N. Virginia).
+
+What is Default Output Format?
+
+Choose json for compatibility with scripts and Terraform.
+
+## Step 3: Verify Python and pip
+
+**What is pip?**
+pip is Python’s package installer for adding extra features to your code.
+
+**Check your versions:**
+
+```
+bash
+```
+
+CopyEdit
+
+`python3 --version pip3 --version`
+
+You should see Python 3.9+ and pip 21.x or higher.
+
+---
+
+## Step 4: Install Python Dependencies Safely (Virtual Environment Recommended)
+
+Recent Macs protect system Python. **Best practice:** Use a virtual environment for dependencies.
+
+To install the `tenacity` library in your lambda folder:
+
+**Create a virtual environment:**
+
+```
+bash
+```
+
+CopyEdit
+
+`cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/lambda python3 -m venv venv`
+
+**Activate the virtual environment:**
+
+```
+bash
+```
+
+CopyEdit
+
+`source venv/bin/activate`
+
+(You’ll see `(venv)` at the start of your terminal line.)
+
+**Install tenacity (and other dependencies):**
+
+```
+bash
+```
+
+CopyEdit
+
+`pip install tenacity`
+
+**Deactivate when done (optional):**
+
+```
+bash
+```
+
+CopyEdit
+
+`deactivate`
+
+> **Tip:** Always activate the virtual environment before installing or running Python code with extra dependencies!
+
+---
+
+## Step 5: Package the Lambda Code
+
+If using dependencies (like tenacity), install them directly into your lambda folder:
+
+```
+bash
+```
+
+CopyEdit
+
+`cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/lambda pip install --target . tenacity`
+
+**Zip everything in the lambda directory (excluding the venv folder if desired):**
+
+```
+bash
+```
+
+CopyEdit
+
+`zip -r lambda_function_payload.zip . -x "venv/*"`
+
+The ZIP must be named as referenced in your Terraform code.
+
+---
+
+## Step 6: Deploy Infrastructure with Terraform
+
+```
+bash
+```
+
+CopyEdit
+
+`cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/terraform terraform init terraform plan terraform apply`
+
+Type `yes` when prompted.
+
+---
+
+## Step 7: Test Lambda and S3 Trigger
+
+* Get your S3 bucket name from the Terraform output.
+* Upload any file to the S3 bucket via the AWS Console.
+* Open AWS CloudWatch → Logs → Log Groups → Find your Lambda function.
+* Review logs to see retry attempts, event details, and success/failure.
+
+---
+
+## Step 8: Clean Up Resources When Done
+
+```
+bash
+```
+
+CopyEdit
+
+`terraform destroy`
+
+---
+
+## Troubleshooting & FAQ
+
+**Q: Lambda fails with \`ModuleNotFoundError: No module named 'tenacity'?**
+You need to package external Python libraries with your Lambda code. For simple projects, install dependencies locally in your lambda folder, then zip everything (excluding venv):
+
+```
+bash
+```
+
+CopyEdit
+
+`cd ~/Downloads/aws-lambda-s3-terraform-sre-starter/lambda pip install --target . tenacity zip -r lambda_function_payload.zip . -x "venv/*"`
+
+Update your Terraform code to reference the correct zip file if needed.
+
+---
+
+**Q: I get AWS permission errors?**
+Ensure your AWS IAM user has permissions for S3, Lambda, IAM, and CloudWatch. For personal/test accounts, attach `AdministratorAccess` (never use in production).
+
+---
+
+**Q: Region errors or missing logs?**
+Make sure you’re using the same region everywhere (`us-east-1` by default).
