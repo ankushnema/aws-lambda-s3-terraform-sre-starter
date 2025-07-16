@@ -37,6 +37,7 @@ bash
 Copy
 Edit
 pip3 install tenacity
+
 ✅ Step 2: Package the Lambda Code
 From your lambda directory:
 
@@ -55,6 +56,7 @@ Copy
 Edit
 pip3 install --target . tenacity
 zip -r lambda_function_payload.zip .
+
 ✅ Step 3: Deploy Infrastructure with Terraform
 bash
 Copy
@@ -79,6 +81,7 @@ bash
 Copy
 Edit
 terraform destroy
+
 🧠 Troubleshooting & FAQ
 Q: Lambda fails with ModuleNotFoundError: No module named 'tenacity'?
 A: You need to package external Python libraries with your Lambda code. For simple projects, install dependencies locally in your lambda folder, then zip everything:
