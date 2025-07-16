@@ -1,30 +1,36 @@
+# AWS Lambda + S3 Trigger — Terraform SRE Starter
 
-# AWS Lambda + S3 + Terraform Starter (SRE Focused)
+This project sets up a reliable, serverless event-driven architecture using AWS Lambda and S3, provisioned via Terraform. It demonstrates core Site Reliability Engineering (SRE) principles like observability, graceful failure handling, and infrastructure as code (IaC).
 
-This project provisions an AWS Lambda function triggered by an S3 upload event using Terraform. It includes retry logic using Python's `tenacity` library to simulate and handle transient failures.
+## 🌍 Use Case
 
-## Features
-- AWS Lambda function written in Python
-- S3 bucket trigger on object upload
-- Terraform-based infrastructure
-- Retry logic with exponential backoff
-- Logging for observability (viewable in CloudWatch)
+When a new object is uploaded to an S3 bucket, a Lambda function is triggered to process the event. The function includes retry logic and structured logging, helping ensure that transient failures are automatically retried and logged for analysis.
 
-## Setup Steps
+---
 
-1. Install prerequisites:
-    - AWS CLI
-    - Terraform
-    - Python 3.9+
-2. Run `terraform init`, `terraform plan`, `terraform apply`
-3. Upload any file to the created S3 bucket
-4. Check logs in AWS CloudWatch
+## 🚀 What This Project Includes
 
-## Retry Logic
-The Lambda retries the operation up to 3 times with exponential backoff in case of random failures (simulated).
+- ✅ AWS Lambda function written in Python 3.9
+- ✅ S3 bucket trigger on object upload
+- ✅ Terraform-based infrastructure provisioning
+- ✅ Retry logic with exponential backoff using `tenacity`
+- ✅ Observability via structured logs (viewable in CloudWatch)
+- ✅ Beginner-friendly project structure and documentation
 
-## Clean Up
-To remove resources:
-```
-terraform destroy
-```
+---
+
+## 🛠️ Getting Started
+
+### Prerequisites
+
+- AWS CLI configured (`aws configure`)
+- Terraform installed
+- Python 3.9+
+- Git
+
+### Setup Steps
+
+1. Clone the repo  
+   ```bash
+   git clone https://github.com/ankushnema/aws-lambda-s3-terraform-sre-starter.git
+   cd aws-lambda-s3-terraform-sre-starter
